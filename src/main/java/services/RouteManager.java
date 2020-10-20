@@ -99,6 +99,17 @@ public class RouteManager {
         dataService.update(newRoute);
     }
 
+    public void editExitStationName(int routeId, String name) {
+        var oldRoute = getRouteById(routeId);
+        var oldExitStation = oldRoute.getEntryStation();
+        var newExitStation = new Terminal(oldExitStation.getTime(), name);
+        var newRoute = oldRoute.toBuilder()
+            .entryStation(newExitStation)
+            .build();
+        dataService.remove(routeId);
+        dataService.update(newRoute);
+    }
+
     public Route createRoute(int routeId, String name, Terminal exitStation, Terminal entryStation,
                              Train train,
                              List<Station> intermediateStations) {
@@ -126,6 +137,24 @@ public class RouteManager {
             throw new IllegalArgumentException("Station with name {" + name + "} doesn't exist");
         var stations = oldRoute.getIntermediateStations()
             .filter(x -> !x.getName().equals(name));
+
+        var newRoute = oldRoute.toBuilder()
+            .intermediateStations(stations)
+            .build();
+        dataService.remove(routeId);
+        dataService.update(newRoute);
+    }
+
+    public void editIntermediateStationName(int routeId, Station station, String name) {
+        var oldRoute = getRouteById(routeId);
+        if (oldRoute.getIntermediateStations().find(x -> x.getName().equals(name)).isEmpty())
+            throw new IllegalArgumentException("Station with name {" + name + "} doesn't exist");
+
+        var oldStation = oldRoute.getIntermediateStations()
+            .find(x -> !x.getName().equals(name)).get();
+        var newStation = oldStation.toBuilder().name(name).build();
+        var stations = oldRoute.getIntermediateStations()
+            .filter(x -> !x.getName().equals(name)).remove(oldStation).append(newStation);
 
         var newRoute = oldRoute.toBuilder()
             .intermediateStations(stations)
