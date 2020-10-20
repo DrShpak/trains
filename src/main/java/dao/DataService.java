@@ -1,7 +1,7 @@
 package dao;
 
 import io.vavr.collection.List;
-import services.route.Route;
+import models.Route;
 
 import java.util.Optional;
 
@@ -13,6 +13,8 @@ public interface DataService {
 //    Route select(int routeId);
 
     List<Route> selectAll();
+
+    void insert(Route route);
 
     void remove(int routeId);
 

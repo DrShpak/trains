@@ -2,16 +2,16 @@ package dao.filedb;
 
 import dao.DataService;
 import io.vavr.collection.List;
-import services.route.Route;
-import services.route.Station;
-import services.route.Terminal;
-import services.route.Train;
+import models.Route;
+import models.Station;
+import models.Terminal;
+import models.Train;
 
 import java.util.Date;
 import java.util.Optional;
 
 public class FileDataService implements DataService {
-    private List<Route> routes;
+    private List<Route> routes; // только для 1 аттестации
 
     public FileDataService() {
         this.routes = fillTestData();
@@ -21,12 +21,13 @@ public class FileDataService implements DataService {
 
     }
 
-//    public Route select(int routeId) {
-//        return null;
-//    }
-
     public List<Route> selectAll() {
         return routes;
+    }
+
+    @Override
+    public void insert(Route route) {
+        routes = routes.append(route);
     }
 
     public void remove(int routeId) {

@@ -1,4 +1,4 @@
-package services.route;
+package models;
 
 import lombok.Value;
 

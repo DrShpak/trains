@@ -1,10 +1,8 @@
-package services.route;
+package models;
 
 import io.vavr.collection.List;
 import lombok.Builder;
 import lombok.Value;
-
-import java.util.Date;
 
 @Value
 @Builder(toBuilder = true)

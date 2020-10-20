@@ -3,13 +3,11 @@ package services;
 import dao.DataService;
 import io.vavr.collection.List;
 import lombok.Value;
-import services.route.Route;
-import services.route.Station;
-import services.route.Terminal;
-import services.route.Train;
+import models.Route;
+import models.Station;
+import models.Terminal;
+import models.Train;
 
-import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Value
@@ -26,7 +24,7 @@ public class RouteManager {
             dataService.remove(routeId);
     }
 
-    public void changeTrain(int routeId, Train newTrain) throws IllegalArgumentException  {
+    public void editTrain(int routeId, Train newTrain) throws IllegalArgumentException  {
         var oldRoute = getRouteById(routeId);
         var newRoute = oldRoute.toBuilder()
             .train(newTrain)
@@ -35,7 +33,7 @@ public class RouteManager {
         dataService.update(newRoute);
     }
 
-    public void changeRouteId(int oldRouteId, int newRouteId) throws IllegalArgumentException  {
+    public void editRouteId(int oldRouteId, int newRouteId) throws IllegalArgumentException  {
         var oldRoute = dataService.getRouteById(oldRouteId)
             .orElseThrow(() -> new IllegalArgumentException("Route with id = " + oldRouteId + " doesn't exist!"));
         var newRoute = oldRoute.toBuilder()
@@ -67,7 +65,7 @@ public class RouteManager {
         dataService.update(newRoute);
     }
 
-    public void changeExitStation(int routeId, Terminal station) throws IllegalArgumentException {
+    public void editExitStation(int routeId, Terminal station) throws IllegalArgumentException {
         var oldRoute = getRouteById(routeId);
 
         /*
@@ -84,8 +82,21 @@ public class RouteManager {
         dataService.update(newRoute);
     }
 
-    public void changeEntryStation(int routeId, Terminal entryStation) {
+    public void editEntryStation(int routeId, Terminal entryStation) {
+        var oldRoute = getRouteById(routeId);
 
+        /*
+        отфильтровали станции, которые стоят передм терминалом
+        все станции после и старая терминальная станция сюда не попадут
+         */
+        var stations = oldRoute.getIntermediateStations()
+            .filter(x -> x.getArrivalTime().before(entryStation.getTime()));
+        var newRoute = oldRoute.toBuilder()
+            .intermediateStations(stations)
+            .entryStation(entryStation)
+            .build();
+        dataService.remove(routeId);
+        dataService.update(newRoute);
     }
 
     public Route createRoute(int routeId, String name, Terminal exitStation, Terminal entryStation,
@@ -118,6 +129,15 @@ public class RouteManager {
 
         var newRoute = oldRoute.toBuilder()
             .intermediateStations(stations)
+            .build();
+        dataService.remove(routeId);
+        dataService.update(newRoute);
+    }
+
+    public void editRouteName(int routeId, String name) {
+        var oldRoute = getRouteById(routeId);
+        var newRoute = oldRoute.toBuilder()
+            .name(name)
             .build();
         dataService.remove(routeId);
         dataService.update(newRoute);
