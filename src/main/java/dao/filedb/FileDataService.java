@@ -41,7 +41,10 @@ public class FileDataService implements DataService {
 
     @Override
     public Optional<Route> getRouteById(int routeId) {
-        return routes.asJava().stream().filter(x -> x.getRouteId() == routeId).findAny();
+        return routes.asJava()
+            .stream()
+            .filter(x -> x.getRouteId() == routeId)
+            .findAny();
     }
 
     private List<Route> fillTestData() {
@@ -85,7 +88,7 @@ public class FileDataService implements DataService {
                             Station.builder()
                                 .name("промежуточная 1")
                                 .arrivalTime(new Date(10000002000L))
-                                .leaveTime(new Date(  100000088000L))
+                                .leaveTime(new Date(  10000008800L))
                                 .build(),
                             Station.builder()
                                 .name("промежуточная 2")

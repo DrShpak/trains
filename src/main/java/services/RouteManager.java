@@ -15,13 +15,16 @@ public class RouteManager {
     DataService dataService;
 
     public void addRoute(Route route) {
-        dataService.update(route);
+//        dataService.update(route);
+        dataService.insert(route);
     }
 
     public void removeRoute(int routeId) {
         var route = dataService.getRouteById(routeId);
         if (route.isPresent())
             dataService.remove(routeId);
+        else
+            throw new IllegalArgumentException("Route with id = " + routeId + " doesn't exist!");
     }
 
     public void editTrain(int routeId, Train newTrain) throws IllegalArgumentException  {
@@ -29,7 +32,7 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .train(newTrain)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -39,12 +42,13 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .routeId(newRouteId)
             .build();
-        dataService.remove(oldRouteId);
+//        dataService.remove(oldRouteId);
         dataService.update(newRoute);
     }
 
-    public void addIntermediateStation(int routeId, Station station) throws Exception {
+    public void addIntermediateStation(int routeId, Station station) {
         var oldRoute = getRouteById(routeId);
+        oldRoute.toBuilder();
         if (station.getArrivalTime().before(oldRoute.getExitStation().getTime()))
             throw new IllegalArgumentException("Exit station has date after than arrival time " + station.getArrivalTime());
         if (station.getLeaveTime().after(oldRoute.getEntryStation().getTime()))
@@ -61,11 +65,11 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .intermediateStations(stations)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
-    public void editExitStation(int routeId, Terminal station) throws IllegalArgumentException {
+    public void editExitStation(int routeId, Terminal station) {
         var oldRoute = getRouteById(routeId);
 
         /*
@@ -78,7 +82,7 @@ public class RouteManager {
             .intermediateStations(stations)
             .exitStation(station)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -95,7 +99,7 @@ public class RouteManager {
             .intermediateStations(stations)
             .entryStation(entryStation)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -106,7 +110,7 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .entryStation(newExitStation)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -141,7 +145,7 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .intermediateStations(stations)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -159,7 +163,7 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .intermediateStations(stations)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
@@ -168,12 +172,16 @@ public class RouteManager {
         var newRoute = oldRoute.toBuilder()
             .name(name)
             .build();
-        dataService.remove(routeId);
+//        dataService.remove(routeId);
         dataService.update(newRoute);
     }
 
     public Route getRouteById(int routeId) {
         return dataService.getRouteById(routeId)
             .orElseThrow(() -> new IllegalArgumentException("Route with id = " + routeId + " doesn't exist!"));
+    }
+
+    public List<Route> getAllRoutes() {
+        return dataService.selectAll();
     }
 }
