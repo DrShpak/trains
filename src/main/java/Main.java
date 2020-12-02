@@ -11,6 +11,7 @@ public class Main {
 //        var mngr = new RouteManager(new FileDataService());
 
         var mngrDb = new RouteManager(new PostgresDAO());
+        System.out.println(mngrDb.getRouteById(4));
 //        var routes = mngr.getDataService().selectAll();
 
 //        mngrDb.addRoute(routes.get(3));

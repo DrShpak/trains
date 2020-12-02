@@ -8,11 +8,23 @@ import models.Station;
 import models.Terminal;
 import models.Train;
 
+import java.io.FileReader;
 import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Value
 public class RouteManager {
     DataService dataService;
+    private static Logger log;
+
+    static {
+        System.setProperty("java.util.logging.config.file",
+            "src/main/resources/logging.properties");
+        log = Logger.getLogger(RouteManager.class.getName());
+    }
+
 
     public void addRoute(Route route) {
 //        dataService.update(route);
@@ -177,11 +189,20 @@ public class RouteManager {
     }
 
     public Route getRouteById(int routeId) {
-        return dataService.getRouteById(routeId)
-            .orElseThrow(() -> new IllegalArgumentException("Route with id = " + routeId + " doesn't exist!"));
+        var supposedRoute = dataService.getRouteById(routeId);
+        if (supposedRoute.isPresent())
+            return supposedRoute.get();
+        else {
+            logException("The route with id " + routeId + " doesn't exist!", new IllegalArgumentException());
+            throw new IllegalArgumentException();
+        }
     }
 
     public List<Route> getAllRoutes() {
         return dataService.selectAll();
+    }
+
+    private void logException(String msg, Exception e) {
+        log.log(Level.SEVERE, msg, e);
     }
 }

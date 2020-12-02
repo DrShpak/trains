@@ -11,8 +11,12 @@
     <build>
         <plugins>
             <plugin>
+<!--                <groupId>org.apache.maven.plugin</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+<!--                <version>3.1</version>-->
                 <configuration>
                     <source>15</source>
                     <target>15</target>
@@ -40,12 +44,12 @@
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-<!--            <scope>test</scope>-->
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.h2database</groupId>-->
+<!--            <artifactId>h2</artifactId>-->
+<!--            <version>1.4.200</version>-->
+<!--&lt;!&ndash;            <scope>test</scope>&ndash;&gt;-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

@@ -30,4 +30,19 @@ public class Route {
 //        this.arrivalTime = arrivalTime;
         this.intermediateStations = intermediateStations.sortBy(Station::getArrivalTime);
     }
+
+    public Route(
+        String name, Terminal exitStation,
+        Terminal entryStation, Train train,
+        List<Station> intermediateStations
+    ) {
+        this.routeId = -1;
+        this.name = name;
+        this.exitStation = exitStation;
+        this.entryStation = entryStation;
+        this.train = train;
+//        this.leaveTime = leaveTime;
+//        this.arrivalTime = arrivalTime;
+        this.intermediateStations = intermediateStations.sortBy(Station::getArrivalTime);
+    }
 }
