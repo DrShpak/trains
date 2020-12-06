@@ -2,6 +2,7 @@ package dao.dbDAO;
 
 import org.postgresql.util.PSQLException;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,13 +12,17 @@ import java.util.Properties;
 
 public class PostgresConnectionBuilder implements ConnectionBuilder {
     private final Properties properties;
-    private final String PATH_TO_CONFIG = "src/main/resources/localConfig.properties";
+    private final String PATH_TO_LOCAL_CONFIG = "src/main/resources/localConfig.properties";
+    private final String PATH_TO_PRODUCTION_CONFIG = "src/main/resources/localConfig.properties";
     private final String DB_NAME = "trainsdb";
 
     public PostgresConnectionBuilder() {
         properties = new Properties();
         try {
-            properties.load(new FileInputStream(PATH_TO_CONFIG));
+            if (new File(PATH_TO_LOCAL_CONFIG).exists())
+                properties.load(new FileInputStream(PATH_TO_LOCAL_CONFIG));
+            else
+                properties.load(new FileInputStream(PATH_TO_PRODUCTION_CONFIG));
             Class.forName(properties.getProperty("db.driver"));
         } catch (ClassNotFoundException | IOException ex) {
             //todo log it
