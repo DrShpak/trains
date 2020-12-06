@@ -1,4 +1,4 @@
-Dec 02, 2020 7:07:58 PM services.RouteManager logException
+Dec 06, 2020 5:41:31 PM services.RouteManager logException
 SEVERE: The route with id 4 doesn't exist!
 java.lang.IllegalArgumentException
 	at services.RouteManager.getRouteById(RouteManager.java:196)
